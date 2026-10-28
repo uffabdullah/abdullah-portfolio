@@ -29,6 +29,25 @@ lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
 gsap.ticker.lagSmoothing(0)
 
+gsap.to('.scroll-progress', {
+  scaleX: 1,
+  ease: 'none',
+  scrollTrigger: { start: 0, end: 'max', scrub: true },
+})
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+if (!prefersReducedMotion) {
+  document.querySelectorAll('.project').forEach((project) => {
+    project.addEventListener('pointermove', (event) => {
+      const bounds = project.getBoundingRect?.() || project.getBoundingClientRect()
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5
+      gsap.to(project, { rotationY: x * 2.5, rotationX: y * -2.5, transformPerspective: 900, duration: 0.35, ease: 'power2.out' })
+    })
+    project.addEventListener('pointerleave', () => gsap.to(project, { rotationY: 0, rotationX: 0, duration: 0.5 }))
+  })
+}
+
 gsap.set('.reveal', { visibility: 'visible' })
 gsap.from('.hero .reveal', { y: 50, opacity: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.15 })
 gsap.to('.hero-copy', {
