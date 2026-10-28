@@ -31,6 +31,18 @@ gsap.ticker.lagSmoothing(0)
 
 gsap.set('.reveal', { visibility: 'visible' })
 gsap.from('.hero .reveal', { y: 50, opacity: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.15 })
+gsap.to('.hero-copy', {
+  y: -120,
+  opacity: 0,
+  filter: 'blur(8px)',
+  ease: 'none',
+  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 35%', scrub: 1 },
+})
+gsap.to('.hero-index', {
+  opacity: 0,
+  ease: 'none',
+  scrollTrigger: { trigger: '.hero', start: 'top top', end: '35% top', scrub: true },
+})
 gsap.utils.toArray('.section-label, .intro-grid, .work-heading, .project, .journey-grid, .skill-cloud, .contact > *').forEach((element) => {
   gsap.from(element, { y: 55, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: element, start: 'top 88%', once: true } })
 })
