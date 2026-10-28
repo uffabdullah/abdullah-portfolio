@@ -90,9 +90,11 @@ const material = new THREE.MeshStandardMaterial({ color: 0xb6d8ff, metalness: 0.
 const knot = new THREE.Mesh(geometry, material)
 group.add(knot)
 
-const wire = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.035 }))
+const wireMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.035 })
+const wire = new THREE.Mesh(geometry, wireMaterial)
 group.add(wire)
-scene.add(new THREE.AmbientLight(0x7777ff, 0.45))
+const ambient = new THREE.AmbientLight(0x7777ff, 0.45)
+scene.add(ambient)
 const key = new THREE.PointLight(0xc9ff38, 55, 20, 2)
 key.position.set(-4, 5, 7)
 scene.add(key)
@@ -100,6 +102,25 @@ const rim = new THREE.PointLight(0x5555ff, 80, 25, 2)
 rim.position.set(5, -3, 3)
 scene.add(rim)
 
+function updateThreeTheme() {
+  const light = document.body.classList.contains('light')
+  material.color.setHex(light ? 0x6550ff : 0xb6d8ff)
+  material.emissive.setHex(light ? 0x3216b9 : 0x1018ff)
+  material.emissiveIntensity = light ? 0.42 : 0.28
+  material.metalness = light ? 0.72 : 0.92
+  material.roughness = light ? 0.22 : 0.16
+  wireMaterial.color.setHex(light ? 0x3216b9 : 0xffffff)
+  wireMaterial.opacity = light ? 0.09 : 0.035
+  ambient.color.setHex(light ? 0xded8ff : 0x7777ff)
+  ambient.intensity = light ? 1.25 : 0.45
+  key.color.setHex(light ? 0xff7a00 : 0xc9ff38)
+  key.intensity = light ? 115 : 55
+  rim.color.setHex(light ? 0x6550ff : 0x5555ff)
+  rim.intensity = light ? 130 : 80
+  renderer.toneMappingExposure = light ? 1.35 : 1.15
+}
+updateThreeTheme()
+themeToggle.addEventListener('click', () => requestAnimationFrame(updateThreeTheme))
 const clock = new THREE.Clock()
 let mouseX = 0
 let mouseY = 0
