@@ -22,7 +22,33 @@ themeToggle.addEventListener('click', () => {
   updateThemeControl()
 })
 
-// Native scrolling is intentional here: it keeps wheel and touch input responsive on lower-power devices.
+let wheelTarget = window.scrollY
+let wheelScrolling = false
+window.addEventListener('scroll', () => {
+  if (!wheelScrolling) wheelTarget = window.scrollY
+}, { passive: true })
+window.addEventListener('wheel', (event) => {
+  if (event.ctrlKey || event.metaKey) return
+  event.preventDefault()
+  wheelTarget = Math.max(0, Math.min(
+    document.documentElement.scrollHeight - window.innerHeight,
+    wheelTarget + event.deltaY * 0.72,
+  ))
+  if (!wheelScrolling) {
+    wheelScrolling = true
+    const glide = () => {
+      const distance = wheelTarget - window.scrollY
+      if (Math.abs(distance) < 0.5) {
+        window.scrollTo(0, wheelTarget)
+        wheelScrolling = false
+        return
+      }
+      window.scrollTo(0, window.scrollY + distance * 0.18)
+      requestAnimationFrame(glide)
+    }
+    requestAnimationFrame(glide)
+  }
+}, { passive: false })
 
 gsap.to('.scroll-progress', {
   scaleX: 1,
