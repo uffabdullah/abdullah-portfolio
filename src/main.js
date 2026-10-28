@@ -26,14 +26,18 @@ themeToggle.addEventListener('click', () => {
 
 const lenis = new Lenis({
   smoothWheel: true,
-  duration: 1.05,
-  wheelMultiplier: 1.2,
-  touchMultiplier: 1.35,
-  easing: (t) => 1 - Math.pow(1 - t, 4),
+  duration: 0.72,
+  wheelMultiplier: 1,
+  touchMultiplier: 1.5,
+  syncTouch: false,
+  easing: (t) => 1 - Math.pow(1 - t, 3),
 })
 lenis.on('scroll', ScrollTrigger.update)
-gsap.ticker.add((time) => lenis.raf(time * 1000))
-gsap.ticker.lagSmoothing(0)
+function smoothScrollFrame(time) {
+  lenis.raf(time)
+  requestAnimationFrame(smoothScrollFrame)
+}
+requestAnimationFrame(smoothScrollFrame)
 
 gsap.to('.scroll-progress', {
   scaleX: 1,
@@ -90,7 +94,7 @@ sceneFog.color.set(document.body.classList.contains('light') ? 0xeeece5 : 0x0808
 const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 100)
 camera.position.set(0, 0, 11)
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5))
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.outputColorSpace = THREE.SRGBColorSpace
 renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -98,7 +102,7 @@ renderer.toneMappingExposure = 1.15
 
 const group = new THREE.Group()
 scene.add(group)
-const geometry = new THREE.TorusKnotGeometry(2.25, 0.58, 180, 28, 2, 3)
+const geometry = new THREE.TorusKnotGeometry(2.25, 0.58, 128, 24, 2, 3)
 const material = new THREE.MeshStandardMaterial({ color: 0xb6d8ff, metalness: 0.92, roughness: 0.16, emissive: 0x1018ff, emissiveIntensity: 0.28 })
 const knot = new THREE.Mesh(geometry, material)
 group.add(knot)
@@ -135,7 +139,7 @@ renderer.setAnimationLoop(animate)
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5))
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
 
@@ -190,11 +194,16 @@ if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion) {
     pointerY = event.clientY
     gsap.set(cursorDot, { x: pointerX, y: pointerY })
   })
-  gsap.set(cursor, { xPercent: -50, yPercent: -50 })
   gsap.set(cursorDot, { xPercent: -50, yPercent: -50 })
-  gsap.ticker.add(() => {
-    gsap.to(cursor, { x: pointerX, y: pointerY, duration: 0.28, ease: 'power3.out', overwrite: true })
-  })
+  let cursorX = pointerX
+  let cursorY = pointerY
+  function animateCursor() {
+    cursorX += (pointerX - cursorX) * 0.2
+    cursorY += (pointerY - cursorY) * 0.2
+    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`
+    requestAnimationFrame(animateCursor)
+  }
+  animateCursor()
 
   document.querySelectorAll('a, button, summary, input, textarea').forEach((target) => {
     target.addEventListener('pointerenter', () => document.body.classList.add('cursor-active'))
