@@ -2,8 +2,6 @@ import './style.css'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import Lenis from 'lenis'
-
 gsap.registerPlugin(ScrollTrigger)
 
 const themeToggle = document.querySelector('.theme-toggle')
@@ -24,20 +22,7 @@ themeToggle.addEventListener('click', () => {
   updateThemeControl()
 })
 
-const lenis = new Lenis({
-  smoothWheel: true,
-  duration: 0.72,
-  wheelMultiplier: 1,
-  touchMultiplier: 1.5,
-  syncTouch: false,
-  easing: (t) => 1 - Math.pow(1 - t, 3),
-})
-lenis.on('scroll', ScrollTrigger.update)
-function smoothScrollFrame(time) {
-  lenis.raf(time)
-  requestAnimationFrame(smoothScrollFrame)
-}
-requestAnimationFrame(smoothScrollFrame)
+// Native scrolling is intentional here: it keeps wheel and touch input responsive on lower-power devices.
 
 gsap.to('.scroll-progress', {
   scaleX: 1,
@@ -124,7 +109,11 @@ window.addEventListener('pointermove', (event) => {
   mouseX = (event.clientX / window.innerWidth - 0.5) * 0.6
   mouseY = (event.clientY / window.innerHeight - 0.5) * 0.4
 })
+let lastRender = 0
 function animate() {
+  const now = performance.now()
+  if (now - lastRender < 1000 / 30) return
+  lastRender = now
   const t = clock.getElapsedTime()
   const scroll = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight)
   group.rotation.x = t * 0.08 + mouseY + scroll * 1.2
@@ -180,43 +169,15 @@ document.querySelectorAll('.timeline-item').forEach((item) => item.addEventListe
   item.classList.add('active')
 }))
 
-if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion) {
-  const cursor = document.createElement('div')
-  const cursorDot = document.createElement('div')
-  cursor.className = 'custom-cursor'
-  cursorDot.className = 'custom-cursor-dot'
-  document.body.append(cursor, cursorDot)
-
-  let pointerX = window.innerWidth / 2
-  let pointerY = window.innerHeight / 2
-  window.addEventListener('pointermove', (event) => {
-    pointerX = event.clientX
-    pointerY = event.clientY
-    gsap.set(cursorDot, { x: pointerX, y: pointerY })
-  })
-  gsap.set(cursorDot, { xPercent: -50, yPercent: -50 })
-  let cursorX = pointerX
-  let cursorY = pointerY
-  function animateCursor() {
-    cursorX += (pointerX - cursorX) * 0.2
-    cursorY += (pointerY - cursorY) * 0.2
-    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`
-    requestAnimationFrame(animateCursor)
-  }
-  animateCursor()
-
-  document.querySelectorAll('a, button, summary, input, textarea').forEach((target) => {
-    target.addEventListener('pointerenter', () => document.body.classList.add('cursor-active'))
-    target.addEventListener('pointerleave', () => document.body.classList.remove('cursor-active'))
-  })
-
+if (!prefersReducedMotion) {
   document.querySelectorAll('.project-card').forEach((card) => {
     card.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse') return
       const bounds = card.getBoundingClientRect()
       const x = (event.clientX - bounds.left) / bounds.width - 0.5
       const y = (event.clientY - bounds.top) / bounds.height - 0.5
-      gsap.to(card, { rotationY: x * 1.8, rotationX: y * -1.8, transformPerspective: 900, duration: 0.45, ease: 'power2.out' })
+      gsap.to(card, { rotationY: x * 0.8, rotationX: y * -0.8, transformPerspective: 900, duration: 0.25, overwrite: true })
     })
-    card.addEventListener('pointerleave', () => gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.55, ease: 'power3.out' }))
+    card.addEventListener('pointerleave', () => gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.35, overwrite: true }))
   })
 }
