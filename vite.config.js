@@ -10,6 +10,7 @@ export default defineConfig({
         counterfeittrace: resolve('projects/counterfeittrace.html'),
         proxyproof: resolve('projects/proxyproof.html'),
         chipin: resolve('projects/chip-in.html'),
+        notFound: resolve('404.html'),
       },
     },
   },

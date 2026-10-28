@@ -125,3 +125,40 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
+
+const menuButton = document.querySelector('.menu-button')
+const menuOverlay = document.querySelector('.menu-overlay')
+const menuClose = document.querySelector('.menu-close')
+function setMenu(open) {
+  menuOverlay?.classList.toggle('open', open)
+  menuOverlay?.setAttribute('aria-hidden', String(!open))
+  menuButton?.setAttribute('aria-expanded', String(open))
+  document.body.style.overflow = open ? 'hidden' : ''
+  if (open) menuClose?.focus()
+  else menuButton?.focus()
+}
+menuButton?.addEventListener('click', () => setMenu(true))
+menuClose?.addEventListener('click', () => setMenu(false))
+menuOverlay?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)))
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && menuOverlay?.classList.contains('open')) setMenu(false) })
+
+const filterButtons = [...document.querySelectorAll('.filter')]
+const projectCards = [...document.querySelectorAll('.project-card')]
+filterButtons.forEach((button) => button.addEventListener('click', () => {
+  filterButtons.forEach((item) => { item.classList.toggle('active', item === button); item.setAttribute('aria-pressed', String(item === button)) })
+  const filter = button.dataset.filter
+  projectCards.forEach((card) => card.classList.toggle('hidden', filter !== 'all' && !card.classList.contains(filter)))
+}))
+
+const showMoreButton = document.querySelector('.show-more')
+showMoreButton?.addEventListener('click', () => {
+  const expanded = showMoreButton.getAttribute('aria-expanded') === 'true'
+  showMoreButton.setAttribute('aria-expanded', String(!expanded))
+  showMoreButton.firstChild.textContent = expanded ? 'Show more ' : 'Show featured '
+  projectCards.forEach((card, index) => { if (index > 3) card.classList.toggle('expanded', !expanded) })
+})
+
+document.querySelectorAll('.timeline-item').forEach((item) => item.addEventListener('click', () => {
+  document.querySelectorAll('.timeline-item').forEach((other) => other.classList.remove('active'))
+  item.classList.add('active')
+}))
