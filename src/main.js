@@ -22,38 +22,10 @@ themeToggle.addEventListener('click', () => {
   updateThemeControl()
 })
 
-let wheelTarget = window.scrollY
-let wheelScrolling = false
-window.addEventListener('scroll', () => {
-  if (!wheelScrolling) wheelTarget = window.scrollY
-}, { passive: true })
-window.addEventListener('wheel', (event) => {
-  if (event.ctrlKey || event.metaKey) return
-  event.preventDefault()
-  wheelTarget = Math.max(0, Math.min(
-    document.documentElement.scrollHeight - window.innerHeight,
-    wheelTarget + event.deltaY * 0.88,
-  ))
-  if (!wheelScrolling) {
-    wheelScrolling = true
-    const glide = () => {
-      const distance = wheelTarget - window.scrollY
-      if (Math.abs(distance) < 0.5) {
-        window.scrollTo(0, wheelTarget)
-        wheelScrolling = false
-        return
-      }
-      window.scrollTo(0, window.scrollY + distance * 0.28)
-      requestAnimationFrame(glide)
-    }
-    requestAnimationFrame(glide)
-  }
-}, { passive: false })
-
 gsap.to('.scroll-progress', {
   scaleX: 1,
   ease: 'none',
-  scrollTrigger: { start: 0, end: 'max', scrub: 0.45 },
+  scrollTrigger: { start: 0, end: 'max', scrub: true },
 })
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
