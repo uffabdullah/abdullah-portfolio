@@ -6,6 +6,24 @@ import Lenis from 'lenis'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const themeToggle = document.querySelector('.theme-toggle')
+const themeIcon = document.querySelector('.theme-icon')
+const savedTheme = localStorage.getItem('portfolio-theme')
+const initialTheme = savedTheme || 'dark'
+document.body.classList.toggle('light', initialTheme === 'light')
+function updateThemeControl() {
+  const light = document.body.classList.contains('light')
+  themeIcon.textContent = light ? '☾' : '☀'
+  themeToggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode')
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', light ? '#eeece5' : '#08080b')
+}
+updateThemeControl()
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light')
+  localStorage.setItem('portfolio-theme', document.body.classList.contains('light') ? 'light' : 'dark')
+  updateThemeControl()
+})
+
 const lenis = new Lenis({ smoothWheel: true, wheelMultiplier: 0.9 })
 lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
@@ -19,7 +37,12 @@ gsap.utils.toArray('.section-label, .intro-grid, .work-heading, .project, .journ
 
 const canvas = document.querySelector('#bg')
 const scene = new THREE.Scene()
-scene.fog = new THREE.FogExp2(0x08080b, 0.08)
+const sceneFog = new THREE.FogExp2(0x08080b, 0.08)
+scene.fog = sceneFog
+themeToggle.addEventListener('click', () => {
+  sceneFog.color.set(document.body.classList.contains('light') ? 0xeeece5 : 0x08080b)
+})
+sceneFog.color.set(document.body.classList.contains('light') ? 0xeeece5 : 0x08080b)
 const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 100)
 camera.position.set(0, 0, 11)
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
