@@ -124,6 +124,9 @@ function animate() {
   renderer.render(scene, camera)
 }
 renderer.setAnimationLoop(animate)
+document.addEventListener('visibilitychange', () => {
+  document.visibilityState === 'visible' ? renderer.setAnimationLoop(animate) : renderer.setAnimationLoop(null)
+})
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight
