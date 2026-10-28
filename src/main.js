@@ -24,7 +24,13 @@ themeToggle.addEventListener('click', () => {
   updateThemeControl()
 })
 
-const lenis = new Lenis({ smoothWheel: true, wheelMultiplier: 0.9 })
+const lenis = new Lenis({
+  smoothWheel: true,
+  duration: 1.05,
+  wheelMultiplier: 1.2,
+  touchMultiplier: 1.35,
+  easing: (t) => 1 - Math.pow(1 - t, 4),
+})
 lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
 gsap.ticker.lagSmoothing(0)
@@ -32,7 +38,7 @@ gsap.ticker.lagSmoothing(0)
 gsap.to('.scroll-progress', {
   scaleX: 1,
   ease: 'none',
-  scrollTrigger: { start: 0, end: 'max', scrub: true },
+  scrollTrigger: { start: 0, end: 'max', scrub: 0.45 },
 })
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -62,8 +68,15 @@ gsap.to('.hero-index', {
   ease: 'none',
   scrollTrigger: { trigger: '.hero', start: 'top top', end: '35% top', scrub: true },
 })
-gsap.utils.toArray('.section-label, .intro-grid, .work-heading, .project, .journey-grid, .skill-cloud, .contact > *').forEach((element) => {
-  gsap.from(element, { y: 55, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: element, start: 'top 88%', once: true } })
+gsap.utils.toArray('.section-label, .intro-grid, .work-heading, .project-card, .journey-grid, .timeline-item, .proof-empty, .skill-cloud, .contact-grid, .faq').forEach((element, index) => {
+  gsap.from(element, {
+    y: 42,
+    opacity: 0,
+    duration: 0.72,
+    delay: (index % 3) * 0.035,
+    ease: 'power3.out',
+    scrollTrigger: { trigger: element, start: 'top 91%', once: true },
+  })
 })
 
 const canvas = document.querySelector('#bg')
@@ -162,3 +175,39 @@ document.querySelectorAll('.timeline-item').forEach((item) => item.addEventListe
   document.querySelectorAll('.timeline-item').forEach((other) => other.classList.remove('active'))
   item.classList.add('active')
 }))
+
+if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion) {
+  const cursor = document.createElement('div')
+  const cursorDot = document.createElement('div')
+  cursor.className = 'custom-cursor'
+  cursorDot.className = 'custom-cursor-dot'
+  document.body.append(cursor, cursorDot)
+
+  let pointerX = window.innerWidth / 2
+  let pointerY = window.innerHeight / 2
+  window.addEventListener('pointermove', (event) => {
+    pointerX = event.clientX
+    pointerY = event.clientY
+    gsap.set(cursorDot, { x: pointerX, y: pointerY })
+  })
+  gsap.set(cursor, { xPercent: -50, yPercent: -50 })
+  gsap.set(cursorDot, { xPercent: -50, yPercent: -50 })
+  gsap.ticker.add(() => {
+    gsap.to(cursor, { x: pointerX, y: pointerY, duration: 0.28, ease: 'power3.out', overwrite: true })
+  })
+
+  document.querySelectorAll('a, button, summary, input, textarea').forEach((target) => {
+    target.addEventListener('pointerenter', () => document.body.classList.add('cursor-active'))
+    target.addEventListener('pointerleave', () => document.body.classList.remove('cursor-active'))
+  })
+
+  document.querySelectorAll('.project-card').forEach((card) => {
+    card.addEventListener('pointermove', (event) => {
+      const bounds = card.getBoundingClientRect()
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5
+      gsap.to(card, { rotationY: x * 1.8, rotationX: y * -1.8, transformPerspective: 900, duration: 0.45, ease: 'power2.out' })
+    })
+    card.addEventListener('pointerleave', () => gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.55, ease: 'power3.out' }))
+  })
+}
