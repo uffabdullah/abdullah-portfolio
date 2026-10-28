@@ -32,7 +32,7 @@ window.addEventListener('wheel', (event) => {
   event.preventDefault()
   wheelTarget = Math.max(0, Math.min(
     document.documentElement.scrollHeight - window.innerHeight,
-    wheelTarget + event.deltaY * 0.72,
+    wheelTarget + event.deltaY * 0.88,
   ))
   if (!wheelScrolling) {
     wheelScrolling = true
@@ -43,7 +43,7 @@ window.addEventListener('wheel', (event) => {
         wheelScrolling = false
         return
       }
-      window.scrollTo(0, window.scrollY + distance * 0.18)
+      window.scrollTo(0, window.scrollY + distance * 0.28)
       requestAnimationFrame(glide)
     }
     requestAnimationFrame(glide)
