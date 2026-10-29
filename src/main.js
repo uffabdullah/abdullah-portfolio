@@ -104,20 +104,20 @@ scene.add(rim)
 
 function updateThreeTheme() {
   const light = document.body.classList.contains('light')
-  material.color.setHex(light ? 0x6550ff : 0xb6d8ff)
-  material.emissive.setHex(light ? 0x3216b9 : 0x1018ff)
-  material.emissiveIntensity = light ? 0.42 : 0.28
-  material.metalness = light ? 0.72 : 0.92
-  material.roughness = light ? 0.22 : 0.16
-  wireMaterial.color.setHex(light ? 0x3216b9 : 0xffffff)
-  wireMaterial.opacity = light ? 0.09 : 0.035
-  ambient.color.setHex(light ? 0xded8ff : 0x7777ff)
-  ambient.intensity = light ? 1.25 : 0.45
-  key.color.setHex(light ? 0xff7a00 : 0xc9ff38)
-  key.intensity = light ? 115 : 55
-  rim.color.setHex(light ? 0x6550ff : 0x5555ff)
-  rim.intensity = light ? 130 : 80
-  renderer.toneMappingExposure = light ? 1.35 : 1.15
+  material.color.setHex(light ? 0x6d5efc : 0xb6d8ff)
+  material.emissive.setHex(light ? 0x4727d8 : 0x1018ff)
+  material.emissiveIntensity = light ? 0.7 : 0.28
+  material.metalness = light ? 0.7 : 0.92
+  material.roughness = light ? 0.18 : 0.16
+  wireMaterial.color.setHex(light ? 0x2d226b : 0xffffff)
+  wireMaterial.opacity = light ? 0.18 : 0.035
+  ambient.color.setHex(light ? 0xf3f4ff : 0x7777ff)
+  ambient.intensity = light ? 1.6 : 0.45
+  key.color.setHex(light ? 0xff9f43 : 0xc9ff38)
+  key.intensity = light ? 140 : 55
+  rim.color.setHex(light ? 0x6958ff : 0x5555ff)
+  rim.intensity = light ? 145 : 80
+  renderer.toneMappingExposure = light ? 1.6 : 1.15
 }
 updateThreeTheme()
 themeToggle.addEventListener('click', () => requestAnimationFrame(updateThreeTheme))
