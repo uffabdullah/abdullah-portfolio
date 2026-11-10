@@ -66,6 +66,7 @@ export default function Portfolio() {
   const contactStartedAt = useRef(Date.now());
   const [contactStatus, setContactStatus] = useState("idle");
   const [contactError, setContactError] = useState("");
+  const [contactFallback, setContactFallback] = useState("");
 
   const submitContactForm = async (event) => {
     event.preventDefault();
@@ -73,6 +74,11 @@ export default function Portfolio() {
     setContactError("");
     const form = event.currentTarget;
     const body = Object.fromEntries(new FormData(form).entries());
+    const subject = `Portfolio message from ${body.name}`;
+    const mailBody = `Name: ${body.name}\nEmail: ${body.email}\n\n${body.message}`;
+    setContactFallback(
+      `mailto:abdullahasgerali@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`
+    );
 
     try {
       const response = await fetch("/api/contact", {
@@ -85,6 +91,7 @@ export default function Portfolio() {
       form.reset();
       contactStartedAt.current = Date.now();
       setContactStatus("sent");
+      setContactFallback("");
     } catch (error) {
       setContactStatus("error");
       setContactError(error.message || "Message could not be sent. Please try again.");
@@ -318,6 +325,11 @@ export default function Portfolio() {
                   )}
                   {contactStatus === "idle" && "Your message goes straight to my inbox."}
                 </p>
+                {contactStatus === "error" && (
+                  <a className="form-fallback-link" href={contactFallback}>
+                    Open your email app with this message ready <span aria-hidden="true">↗</span>
+                  </a>
+                )}
               </form>
             </div>
             <a className="contact-link" href="/faq">

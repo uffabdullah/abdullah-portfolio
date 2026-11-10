@@ -102,37 +102,37 @@ function makeScreenTexture() {
   const context = canvas.getContext("2d");
   let texture;
   const draw = () => {
-    const background = context.createLinearGradient(0, 0, 420, 1024);
-    background.addColorStop(0, "#b9c9de");
-    background.addColorStop(0.46, "#e8edf5");
-    background.addColorStop(1, "#a8b8cf");
+    const background = context.createLinearGradient(0, 0, 512, 1024);
+    background.addColorStop(0, "#829cc0");
+    background.addColorStop(0.42, "#dce5f2");
+    background.addColorStop(1, "#a9bad3");
     context.fillStyle = background;
     context.fillRect(0, 0, 512, 1024);
 
     const waves = [
-      { y: 120, x: -180, color: "#f4f6fb" },
-      { y: 300, x: 90, color: "#dce4f0" },
-      { y: 500, x: -145, color: "#f7f8fb" },
-      { y: 710, x: 95, color: "#d9e2ef" },
-      { y: 900, x: -150, color: "#f2f5f9" },
+      { y: 168, x: -215, color: "#edf2fa" },
+      { y: 360, x: 72, color: "#c5d3e7" },
+      { y: 570, x: -205, color: "#f6f7fa" },
+      { y: 782, x: 72, color: "#bdcce1" },
+      { y: 984, x: -214, color: "#eff3f9" },
     ];
     waves.forEach(({ y, x, color }) => {
       context.save();
-      context.shadowColor = "rgba(77, 95, 122, .16)";
-      context.shadowBlur = 22;
-      context.shadowOffsetY = 8;
+      context.shadowColor = "rgba(44, 58, 81, .18)";
+      context.shadowBlur = 28;
+      context.shadowOffsetY = 10;
       context.beginPath();
       context.moveTo(x, y);
-      context.bezierCurveTo(x + 110, y - 100, x + 250, y - 90, x + 360, y - 12);
-      context.bezierCurveTo(x + 460, y + 58, x + 530, y + 56, x + 700, y - 46);
-      context.lineTo(x + 700, y + 104);
-      context.bezierCurveTo(x + 520, y + 190, x + 420, y + 164, x + 330, y + 106);
-      context.bezierCurveTo(x + 205, y + 24, x + 104, y + 30, x, y + 122);
+      context.bezierCurveTo(x + 130, y - 112, x + 258, y - 94, x + 366, y - 8);
+      context.bezierCurveTo(x + 482, y + 82, x + 586, y + 61, x + 720, y - 48);
+      context.lineTo(x + 720, y + 132);
+      context.bezierCurveTo(x + 565, y + 216, x + 454, y + 188, x + 336, y + 112);
+      context.bezierCurveTo(x + 216, y + 30, x + 104, y + 36, x, y + 144);
       context.closePath();
-      const band = context.createLinearGradient(0, y - 90, 0, y + 170);
+      const band = context.createLinearGradient(0, y - 110, 0, y + 210);
       band.addColorStop(0, "#ffffff");
-      band.addColorStop(0.55, color);
-      band.addColorStop(1, "#c5d1e2");
+      band.addColorStop(0.53, color);
+      band.addColorStop(1, "#aebfd7");
       context.fillStyle = band;
       context.fill();
       context.restore();
@@ -156,30 +156,91 @@ function makeScreenTexture() {
       .format(now)
       .toUpperCase();
 
-    context.fillStyle = "rgba(28, 38, 53, .9)";
-    context.font = "600 21px Arial";
-    context.fillText(time, 48, 65);
-    context.textAlign = "right";
-    context.font = "500 17px Arial";
-    context.fillText("••• 100%", 464, 65);
-    context.textAlign = "center";
-    context.font = "500 22px Arial";
-    context.fillStyle = "rgba(34, 43, 58, .78)";
-    context.fillText(date, 256, 362);
-    context.font = "300 112px Arial";
-    context.fillStyle = "#253247";
-    context.fillText(time.slice(0, -3).trim(), 256, 492);
-    context.font = "500 22px Arial";
-    context.fillStyle = "rgba(37, 51, 72, .78)";
-    context.fillText("INDIA STANDARD TIME  ·  IST", 256, 530);
+    const ink = "rgba(28, 38, 53, .88)";
+    context.fillStyle = ink;
+    context.font = "600 20px -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+    context.fillText(time, 38, 64);
+
+    context.save();
+    context.strokeStyle = ink;
+    context.fillStyle = ink;
+    context.lineWidth = 3;
+    context.lineCap = "round";
+    for (let index = 0; index < 4; index += 1) {
+      context.fillRect(398 + index * 8, 61 - index * 5, 5, 8 + index * 5);
+    }
     context.beginPath();
-    context.arc(256, 840, 53, 0, Math.PI * 2);
-    context.strokeStyle = "rgba(255, 255, 255, .72)";
-    context.lineWidth = 2;
+    context.moveTo(438, 49);
+    context.quadraticCurveTo(454, 63, 438, 77);
+    context.moveTo(444, 55);
+    context.quadraticCurveTo(453, 63, 444, 71);
     context.stroke();
-    context.font = "400 27px Arial";
-    context.fillStyle = "#34455e";
-    context.fillText("◉", 256, 850);
+    context.beginPath();
+    context.arc(438, 63, 2.2, 0, Math.PI * 2);
+    context.fill();
+    context.strokeRect(463, 53, 26, 14);
+    context.fillRect(489, 57, 3, 6);
+    context.fillRect(466, 56, 19, 8);
+    context.restore();
+
+    context.textAlign = "center";
+    context.font = "500 18px -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+    context.fillStyle = "rgba(34, 43, 58, .76)";
+    context.fillText(date, 256, 350);
+    context.font = "300 112px -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+    context.fillStyle = "#26364f";
+    context.fillText(time.replace(/\s?[AP]M$/, "").trim(), 256, 476);
+    context.font = "500 17px -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+    context.fillStyle = "rgba(37, 51, 72, .76)";
+    context.fillText("INDIA STANDARD TIME  ·  IST", 256, 512);
+
+    const drawControl = (x, kind) => {
+      context.beginPath();
+      context.arc(x, 922, 31, 0, Math.PI * 2);
+      context.fillStyle = "rgba(31, 43, 63, .3)";
+      context.fill();
+      context.strokeStyle = "rgba(255, 255, 255, .8)";
+      context.lineWidth = 2;
+      context.stroke();
+      context.save();
+      context.translate(x, 922);
+      context.strokeStyle = "#ffffff";
+      context.fillStyle = "#ffffff";
+      context.lineWidth = 3;
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      if (kind === "flashlight") {
+        context.beginPath();
+        context.moveTo(-7, -13);
+        context.lineTo(7, -13);
+        context.lineTo(5, -4);
+        context.lineTo(4, 12);
+        context.lineTo(-4, 12);
+        context.lineTo(-5, -4);
+        context.closePath();
+        context.stroke();
+        context.beginPath();
+        context.moveTo(-5, -5);
+        context.lineTo(5, -5);
+        context.stroke();
+      } else {
+        context.strokeRect(-13, -9, 26, 19);
+        context.beginPath();
+        context.arc(0, 0, 6, 0, Math.PI * 2);
+        context.stroke();
+        context.beginPath();
+        context.arc(8, -5, 1, 0, Math.PI * 2);
+        context.fill();
+      }
+      context.restore();
+    };
+    drawControl(86, "flashlight");
+    drawControl(426, "camera");
+    context.beginPath();
+    context.roundRect(174, 1002, 164, 6, 3);
+    context.fillStyle = "rgba(255, 255, 255, .92)";
+    context.fill();
+
     context.textAlign = "left";
     if (texture) texture.needsUpdate = true;
   };
@@ -234,19 +295,18 @@ function createPhone(scene) {
   const brushed = makeBrushedTexture();
   const roughness = makeRoughnessTexture();
   const frameMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xaab9d0,
+    color: 0xc3cede,
     map: brushed,
     roughnessMap: roughness,
     metalness: 1,
-    roughness: 0.28,
+    roughness: 0.2,
     clearcoat: 0.75,
     clearcoatRoughness: 0.12,
   });
   const backMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x8595ae,
-    map: brushed,
-    metalness: 0.28,
-    roughness: 0.34,
+    color: 0xb9c8df,
+    metalness: 0.12,
+    roughness: 0.28,
     clearcoat: 0.88,
     clearcoatRoughness: 0.2,
   });
@@ -269,7 +329,7 @@ function createPhone(scene) {
 
   const frontBezel = addExtrudedPart(
     phone,
-    extrudedShape(69.2, 144.2, 9.5, 0.22, 0.025),
+    extrudedShape(70, 145, 9.8, 0.22, 0.025),
     new THREE.MeshPhysicalMaterial({
       color: 0x121418,
       metalness: 0.25,
@@ -283,19 +343,19 @@ function createPhone(scene) {
 
   addExtrudedPart(
     phone,
-    extrudedShape(68.6, 143.6, 9.2, 0.12, 0.025),
+    extrudedShape(69.2, 144.2, 9.5, 0.12, 0.025),
     glassMaterial,
     [0, 0, 3.7]
   );
 
   const screen = makeScreenTexture();
   const screenTexture = screen.texture;
-  const screenGeometry = new THREE.ShapeGeometry(roundedRect(66.2, 140.6, 8.4), 12);
+  const screenGeometry = new THREE.ShapeGeometry(roundedRect(68, 142, 9.3), 12);
   const positions = screenGeometry.getAttribute("position");
   const uvs = new Float32Array(positions.count * 2);
   for (let index = 0; index < positions.count; index += 1) {
-    uvs[index * 2] = positions.getX(index) / 66.2 + 0.5;
-    uvs[index * 2 + 1] = positions.getY(index) / 140.6 + 0.5;
+    uvs[index * 2] = positions.getX(index) / 68 + 0.5;
+    uvs[index * 2 + 1] = positions.getY(index) / 142 + 0.5;
   }
   screenGeometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
   const display = addExtrudedPart(
@@ -329,90 +389,106 @@ function createPhone(scene) {
 
   const cameraPlate = addExtrudedPart(
     phone,
-    extrudedShape(39, 40, 8, 1, 0.08),
+    extrudedShape(43, 45, 9, 1.1, 0.08),
     new THREE.MeshPhysicalMaterial({
-      color: 0x94a4bd,
-      metalness: 0.42,
-      roughness: 0.3,
+      color: 0xc1cde0,
+      metalness: 0.34,
+      roughness: 0.23,
       clearcoat: 1,
       clearcoatRoughness: 0.16,
     }),
-    [-14, 49, -4.25]
+    [-14, 49, -4.3]
   );
   cameraPlate.name = "Camera island";
-  const lensMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x050a13,
-    metalness: 0.68,
-    roughness: 0.09,
-    clearcoat: 1,
-  });
+  const lensCanvas = document.createElement("canvas");
+  lensCanvas.width = 128;
+  lensCanvas.height = 128;
+  const lensContext = lensCanvas.getContext("2d");
+  const lensGradient = lensContext.createRadialGradient(42, 34, 4, 64, 64, 64);
+  lensGradient.addColorStop(0, "#54749b");
+  lensGradient.addColorStop(0.17, "#182d4b");
+  lensGradient.addColorStop(0.63, "#07101d");
+  lensGradient.addColorStop(1, "#02050b");
+  lensContext.fillStyle = lensGradient;
+  lensContext.fillRect(0, 0, 128, 128);
+  lensContext.beginPath();
+  lensContext.ellipse(43, 38, 16, 9, -0.65, 0, Math.PI * 2);
+  lensContext.fillStyle = "rgba(197, 222, 255, .45)";
+  lensContext.fill();
+  const lensTexture = new THREE.CanvasTexture(lensCanvas);
+  lensTexture.colorSpace = THREE.SRGBColorSpace;
   const lensRingMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xc9d3e2,
-    metalness: 1,
-    roughness: 0.2,
+    color: 0xd5dceb,
+    metalness: 0.95,
+    roughness: 0.17,
+    clearcoat: 0.85,
+  });
+  const lensMaterial = new THREE.MeshBasicMaterial({
+    map: lensTexture,
+    toneMapped: false,
+    side: THREE.DoubleSide,
   });
   for (const [x, y] of [
-    [-24, 58],
-    [-8, 49],
-    [-24, 40],
+    [-24, 59],
+    [-8, 59],
+    [-24, 42],
   ]) {
-    const ring = new THREE.Mesh(
-      new THREE.CylinderGeometry(5.4, 5.4, 0.9, 40),
-      lensRingMaterial
-    );
-    ring.rotation.x = Math.PI / 2;
-    ring.position.set(x, y, -5.08);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(4.9, 0.62, 12, 48), lensRingMaterial);
+    ring.position.set(x, y, -5.03);
     phone.add(ring);
-    const lens = new THREE.Mesh(
-      new THREE.CylinderGeometry(4.35, 4.35, 0.9, 40),
-      lensMaterial
-    );
-    lens.rotation.x = Math.PI / 2;
-    lens.position.set(x, y, -5.62);
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(4.43, 48), lensMaterial);
+    lens.position.set(x, y, -5.1);
     phone.add(lens);
-    const lensCoating = new THREE.Mesh(
-      new THREE.CircleGeometry(3.55, 40),
+    const innerLens = new THREE.Mesh(
+      new THREE.CircleGeometry(3.74, 48),
       new THREE.MeshBasicMaterial({
-        color: 0x081427,
+        color: 0x10233d,
         transparent: true,
-        opacity: 0.92,
+        opacity: 0.38,
         side: THREE.DoubleSide,
       })
     );
-    lensCoating.position.set(x, y, -6.1);
-    phone.add(lensCoating);
+    innerLens.position.set(x, y, -5.12);
+    phone.add(innerLens);
   }
   const cameraFlash = new THREE.Mesh(
-    new THREE.CircleGeometry(2.25, 32),
-    new THREE.MeshBasicMaterial({ color: 0xf6f3eb, side: THREE.DoubleSide })
+    new THREE.CircleGeometry(2.3, 32),
+    new THREE.MeshBasicMaterial({ color: 0xfffdf5, side: THREE.DoubleSide })
   );
-  cameraFlash.position.set(0, 59, -4.9);
+  cameraFlash.position.set(-8, 42, -5.04);
   phone.add(cameraFlash);
-  const lidar = new THREE.Mesh(
-    new THREE.CircleGeometry(2.15, 32),
-    new THREE.MeshPhysicalMaterial({
-      color: 0x273143,
-      metalness: 0.5,
-      roughness: 0.24,
-      side: THREE.DoubleSide,
-    })
+  const flashRing = new THREE.Mesh(
+    new THREE.TorusGeometry(2.9, 0.35, 8, 36),
+    lensRingMaterial
   );
-  lidar.position.set(0, 41, -4.9);
+  flashRing.position.set(-8, 42, -5.03);
+  phone.add(flashRing);
+  const lidar = new THREE.Mesh(
+    new THREE.CircleGeometry(2, 32),
+    new THREE.MeshBasicMaterial({ color: 0x111d2d, side: THREE.DoubleSide })
+  );
+  lidar.position.set(-8, 32, -5.04);
   phone.add(lidar);
+  const lidarRing = new THREE.Mesh(
+    new THREE.TorusGeometry(2.5, 0.35, 8, 32),
+    lensRingMaterial
+  );
+  lidarRing.position.set(-8, 32, -5.03);
+  phone.add(lidarRing);
 
   const monogramCanvas = document.createElement("canvas");
   monogramCanvas.width = 128;
   monogramCanvas.height = 128;
   const monogramContext = monogramCanvas.getContext("2d");
-  monogramContext.fillStyle = "rgba(245, 248, 255, .92)";
-  monogramContext.font = "500 62px Georgia";
+  monogramContext.fillStyle = "rgba(51, 66, 88, .68)";
+  monogramContext.font = "500 48px Arial";
   monogramContext.textAlign = "center";
   monogramContext.textBaseline = "middle";
   monogramContext.fillText("AA", 64, 64);
   const monogramTexture = new THREE.CanvasTexture(monogramCanvas);
   monogramTexture.colorSpace = THREE.SRGBColorSpace;
   const monogram = new THREE.Mesh(
-    new THREE.PlaneGeometry(17, 17),
+    new THREE.PlaneGeometry(12, 12),
     new THREE.MeshBasicMaterial({
       map: monogramTexture,
       transparent: true,
@@ -420,8 +496,24 @@ function createPhone(scene) {
       depthWrite: false,
     })
   );
-  monogram.position.set(0, -2, -3.86);
+  monogram.position.set(0, -4, -3.86);
   phone.add(monogram);
+
+  const antennaMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xdce3ee,
+    metalness: 0.55,
+    roughness: 0.32,
+  });
+  for (const side of [-1, 1]) {
+    for (const y of [-52, 0, 52]) {
+      const antennaBand = new THREE.Mesh(
+        new THREE.BoxGeometry(0.12, 3.4, PHONE.depth + 0.08),
+        antennaMaterial
+      );
+      antennaBand.position.set(side * (PHONE.width / 2 - 0.04), y, 0);
+      phone.add(antennaBand);
+    }
+  }
 
   const buttonMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xd5deec,
@@ -566,8 +658,8 @@ export default function DeviceScene() {
       updateCueOffsets();
       camera.aspect = width / height;
       camera.fov = width < 720 ? 33 : 29;
-      device.phone.position.set(width < 720 ? 18 : 92, width < 720 ? -10 : 0, 0);
-      device.phone.scale.setScalar(width < 720 ? 0.68 : 0.84);
+      device.phone.position.set(width < 720 ? 18 : 92, width < 720 ? -38 : 0, 0);
+      device.phone.scale.setScalar(width < 720 ? 0.58 : 0.84);
       camera.updateProjectionMatrix();
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lowPower ? 1 : 1.25));
       renderer.setSize(width, height);

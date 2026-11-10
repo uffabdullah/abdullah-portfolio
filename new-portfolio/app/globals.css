@@ -328,6 +328,14 @@ body { background: var(--paper); color: var(--ink); }
 .contact-submit span { font-size: 15px; }
 .form-feedback { min-height: 20px; margin: -5px 0 0; color: #716b64; font-size: 11px; }
 .form-feedback a { color: #73543e; text-decoration: underline; text-underline-offset: 3px; }
+.form-fallback-link, .faq-inline-link {
+  color: #73543e;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.form-fallback-link { width: fit-content; margin-top: -8px; }
+.form-fallback-link span { margin-left: 4px; }
 .contact-link { margin-top: 34px; border-color: #92745e; color: #39342f; }
 .site-footer {
   border-color: var(--line);
@@ -406,6 +414,7 @@ body { background: var(--paper); color: var(--ink); }
 }
 .faq-item[open] summary i { transform: rotate(45deg); }
 .faq-item > p { max-width: 720px; margin: -4px 42px 25px 67px; color: #66625d; font-size: 13px; line-height: 1.85; }
+.faq-item > p .faq-inline-link { font-size: inherit; }
 .faq-footer { width: 100%; margin-top: auto; }
 
 @media (max-width: 760px) {

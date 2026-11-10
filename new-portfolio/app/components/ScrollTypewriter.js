@@ -26,7 +26,7 @@ export default function ScrollTypewriter({ text }) {
           autoAlpha: 1,
           duration: 0.01,
           ease: "none",
-          stagger: Math.min(0.022, 1.8 / characters.length),
+          stagger: Math.min(0.03, 2.4 / characters.length),
           onComplete: () => element.classList.remove("is-typing"),
           scrollTrigger: {
             trigger: element,

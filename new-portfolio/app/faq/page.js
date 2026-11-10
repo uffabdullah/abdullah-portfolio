@@ -15,7 +15,8 @@ const answers = [
   {
     question: "How do I contact you?",
     answer:
-      "Use the message form on the home page or email me directly at abdullahasgerali@gmail.com. I’ll reply to the address you provide.",
+      "Use the message form on the home page. If it is unavailable, email me directly at",
+    emailLink: true,
   },
   {
     question: "Where can I see your work?",
@@ -69,7 +70,18 @@ export default function FAQPage() {
                 <ScrollTypewriter text={item.question} />
                 <i aria-hidden="true">+</i>
               </summary>
-              <p><ScrollTypewriter text={item.answer} /></p>
+              <p>
+                <ScrollTypewriter text={item.answer} />
+                {item.emailLink && (
+                  <>
+                    {" "}
+                    <a className="faq-inline-link" href="mailto:abdullahasgerali@gmail.com">
+                      abdullahasgerali@gmail.com
+                    </a>
+                    .
+                  </>
+                )}
+              </p>
             </details>
           ))}
         </div>
